@@ -141,6 +141,16 @@
     }
 }
 
+- (void)setSticky:(BOOL)sticky
+{
+    _sticky = sticky;
+
+    if (sticky)
+    {
+        [self expand];
+    }
+}
+
 - (void)offsetCenterBy:(CGPoint)deltaPoint
 {
     self.view.center = CGPointMake(self.view.center.x + deltaPoint.x,
