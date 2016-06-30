@@ -90,6 +90,7 @@
 - (void)shyNavBarManagerDidBecomeFullyContracted:(TLYShyNavBarManager *) shyNavBarManager;
 - (void)shyNavBarManagerDidFinishContracting:(TLYShyNavBarManager *) shyNavBarManager;
 - (void)shyNavBarManagerDidFinishExpanding:(TLYShyNavBarManager *) shyNavBarManager;
+- (void)shyNavBarManagerVisibilityDidChange:(TLYShyNavBarManager *) shyNavBarManager visible:(BOOL)visble;
 
 @end
 

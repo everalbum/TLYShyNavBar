@@ -41,6 +41,7 @@ static void * const kTLYShyNavBarManagerKVOContext = (void*)&kTLYShyNavBarManage
 
 @property (nonatomic, assign) BOOL contracting;
 @property (nonatomic, assign) BOOL previousContractionState;
+@property (nonatomic, assign) BOOL previousVisibilityState;
 
 @property (nonatomic, readonly) BOOL isViewControllerVisible;
 
@@ -60,6 +61,7 @@ static void * const kTLYShyNavBarManagerKVOContext = (void*)&kTLYShyNavBarManage
         /* Initialize defaults */
         self.contracting = NO;
         self.previousContractionState = YES;
+        self.previousVisibilityState = YES;
 
         self.expansionResistance = 200.f;
         self.contractionResistance = 0.f;
@@ -308,6 +310,18 @@ static void * const kTLYShyNavBarManagerKVOContext = (void*)&kTLYShyNavBarManage
         } else {
             visibleTop = MAX(maxNavY, maxExtensionY);
         }
+        
+        CGFloat extensionViewY = self.extensionViewContainer.frame.origin.y;
+        CGFloat maxNavBarY = CGRectGetMaxY(self.viewController.navigationController.navigationBar.frame);
+        CGFloat viewY = self.viewController.view.frame.origin.y;
+        BOOL isVisible = ABS(extensionViewY + viewY) > [self.statusBarController calculateTotalHeightRecursively];
+        if (isVisible != self.previousVisibilityState) {
+            if ([self.delegate respondsToSelector:@selector(shyNavBarManagerVisibilityDidChange:visible:)]) {
+                [self.delegate shyNavBarManagerVisibilityDidChange:self visible:isVisible];
+            }
+            self.previousVisibilityState = isVisible;
+        }
+        
         if (visibleTop == self.statusBarController.calculateTotalHeightRecursively) {
             if ([self.delegate respondsToSelector:@selector(shyNavBarManagerDidBecomeFullyContracted:)]) {
                 [self.delegate shyNavBarManagerDidBecomeFullyContracted:self];
